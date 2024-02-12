@@ -35,14 +35,18 @@ def load_data_from_api(*args, **kwargs):
 
     df = pd.DataFrame()
 
-    for month in range(10, 13):
-        url = 'https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2020-' + str(month) + '.csv.gz'
-        add = pd.read_csv(
+    for month in range(1, 13):
+        if month < 10:
+            url = 'https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2022-0' + str(month) + '.parquet'
+        else:
+            url = 'https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2022-' + str(month) + '.parquet'
+    
+        add = pd.read_parquet(
             url, 
-            sep=",", 
-            compression="gzip", 
-            dtype=taxi_dtypes, 
-            parse_dates=parse_dates)
+            engine="pyarrow", 
+            # dtype=taxi_dtypes, 
+            # parse_dates=parse_dates
+        )
         df = pd.concat([df, add])
 
         df = df
