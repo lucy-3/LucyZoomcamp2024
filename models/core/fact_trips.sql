@@ -3,12 +3,12 @@
 with green_tripdata as (
     select *, 
         'Green' as service_type
-    from {{ ref('stg_green_tripdata') }}
+    from {{ ref('stg_green_trip_data') }}
 ), 
 yellow_tripdata as (
     select *, 
         'Yellow' as service_type
-    from {{ ref('stg_yellow_tripdata') }}
+    from {{ ref('stg_yellow_trip_data') }}
 ), 
 trips_unioned as (
     select * from green_tripdata
