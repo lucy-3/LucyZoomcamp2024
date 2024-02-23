@@ -12,12 +12,12 @@ blocks:
   language: python
   name: load_api_data
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
   type: data_loader
   upstream_blocks: []
   uuid: load_api_data
-- all_upstream_blocks_executed: false
+- all_upstream_blocks_executed: true
   color: null
   configuration:
     file_source:
@@ -30,7 +30,7 @@ blocks:
   language: python
   name: transform_taxi_data
   retry_config: null
-  status: executed
+  status: failed
   timeout: null
   type: transformer
   upstream_blocks:
@@ -42,8 +42,7 @@ blocks:
     file_source:
       path: transformers/transform_staged_data.py
   downstream_blocks:
-  - taxi_data_to_postgres
-  - taxi_to_gcs_partitioned_parquet
+  - write_green_taxi_to_bigquery
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -59,39 +58,28 @@ blocks:
 - all_upstream_blocks_executed: false
   color: null
   configuration:
-    file_source:
-      path: data_exporters/taxi_data_to_postgres.py
+    data_provider: bigquery
+    data_provider_profile: default
+    data_provider_schema: ny_taxi
+    data_provider_table: green_cab_data
+    dbt: {}
+    disable_query_preprocessing: false
+    export_write_policy: append
+    limit: 1000
+    use_raw_sql: false
   downstream_blocks: []
   executor_config: null
   executor_type: local_python
   has_callback: false
-  language: python
-  name: taxi_data_to_postgres
+  language: sql
+  name: write_green_taxi_to_bigquery
   retry_config: null
   status: executed
   timeout: null
   type: data_exporter
   upstream_blocks:
   - transform_staged_data
-  uuid: taxi_data_to_postgres
-- all_upstream_blocks_executed: false
-  color: null
-  configuration:
-    file_source:
-      path: data_exporters/taxi_to_gcs_partitioned_parquet.py
-  downstream_blocks: []
-  executor_config: null
-  executor_type: local_python
-  has_callback: false
-  language: python
-  name: taxi_to_gcs_partitioned_parquet
-  retry_config: null
-  status: executed
-  timeout: null
-  type: data_exporter
-  upstream_blocks:
-  - transform_staged_data
-  uuid: taxi_to_gcs_partitioned_parquet
+  uuid: write_green_taxi_to_bigquery
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}

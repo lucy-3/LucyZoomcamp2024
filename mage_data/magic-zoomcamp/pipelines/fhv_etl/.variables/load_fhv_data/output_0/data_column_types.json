@@ -1,0 +1,1 @@
+{"dispatching_base_num": "str", "pickup_datetime": "datetime64[ns]", "dropOff_datetime": "datetime64[ns]", "PUlocationID": "float64", "DOlocationID": "float64", "Affiliated_base_number": "str"}
